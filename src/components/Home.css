@@ -1,0 +1,28 @@
+.home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+
+.banner {
+  text-align: center;
+  padding: 2rem;
+}
+
+.banner-logo {
+  width: 120px;
+  height: 120px;
+}
+
+.banner-title {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 2rem;
+  color: var(--color-text);
+}
+
+.banner-text {
+  margin: 0;
+  color: var(--color-muted);
+}

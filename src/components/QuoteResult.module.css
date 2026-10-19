@@ -1,0 +1,28 @@
+.wrapper {
+  margin-top: 1.5rem;
+}
+
+.card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.amount {
+  margin: 0.25rem 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.card dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+}
+
+.card dd {
+  margin: 0;
+  font-weight: 600;
+}
