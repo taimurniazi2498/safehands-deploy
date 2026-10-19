@@ -1,123 +1,102 @@
-# SafeHands Quote Form
+# SafeHands Insurance Quote SPA
 
-Tasks 3, 4 and 5 of the SafeHands Insurance Quote SPA: an accessible quote request form with live validation, connected to a mock quotes API with loading and error states, plus dark mode, performance tweaks and automated tests. Built with React and Vite.
+[![CI](https://github.com/taimurniazi2498/safehands-deploy/actions/workflows/ci.yml/badge.svg)](https://github.com/taimurniazi2498/safehands-deploy/actions/workflows/ci.yml)
 
-[![CI](https://github.com/taimurniazi2498/safehands-dark-mode-tests/actions/workflows/ci.yml/badge.svg)](https://github.com/taimurniazi2498/safehands-dark-mode-tests/actions/workflows/ci.yml)
+**Live site:** https://safehands-insurance-quote.netlify.app
 
-## Features
+## Project
 
-- Fields: full name, email, phone and insurance type (Health, Auto, Home, Life)
-- HTML5 input types (`text`, `email`, `tel`) with `required` attributes
-- Live validation: errors update while typing and when a field loses focus
-- On submit, the first invalid field receives focus
-- Valid data is sent to a mock endpoint (jsonplaceholder) with `fetch`
-- A spinner is shown while the request is pending, and the submit button is disabled
-- On failure, a friendly error message appears with a "Try again" button
-- On success, a quote card shows the estimated premium, coverage amount, deductible and quote ID
-- Responsive layout, checked on a mobile viewport (iPhone SE)
-- Light and dark theme with a sun/moon toggle in the header, remembered between visits
+A single-page app for SafeHands Insurance Brokers where a visitor can request an insurance quote online. Built with React and Vite.
 
-## Dark mode
-
-- Light and dark colour palettes are defined as CSS variables in `src/index.css` (`:root` and `[data-theme='dark']`)
-- `ThemeProvider` keeps the theme in React state, sets `data-theme` on the `<html>` element and saves the choice in `localStorage`
-- On the first visit the theme follows the system setting (`prefers-color-scheme`); after that the saved choice is used
-- The toggle button in the NavBar has an `aria-label` that changes with the theme
-- Component styles use the theme variables, so no hard-coded colours are left outside `index.css`
-
-## Performance
-
-Lighthouse was run on the production build (`npm run build`, then `npm run preview`) in an Incognito window:
-
-| Category | Score |
-| --- | --- |
-| Performance | 100 |
-| Accessibility | 100 |
-| Best Practices | 100 |
+- Pages: Home, About and Quote, with React Router and a responsive NavBar (hamburger menu below 768px)
+- Accessible quote form: full name, email, phone and insurance type, with live validation, ARIA error messages and focus on the first invalid field
+- Mock quotes API (jsonplaceholder) with a loading spinner, a friendly error message with a "Try again" button, and a quote card on success
+- Light and dark theme with a sun/moon toggle, saved in `localStorage`
+- Route-based code splitting with `React.lazy` for the About and Quote pages
+- Lighthouse on the production build: 100 for Performance, Accessibility and Best Practices
 
 ![Lighthouse scores](docs/lighthouse-scores.png)
 
-- Route-based code splitting with `React.lazy` and `Suspense`: the About and Quote pages are loaded only when a visitor opens them, so the first page load stays small
-- The build now produces separate chunks for the About and Quote pages
+**Tech:** React, Vite, React Router, validator.js, CSS Modules, Vitest, React Testing Library, Cypress, GitHub Actions, Netlify
 
-## Testing
+**Structure**
 
-Unit tests use **Vitest** with React Testing Library. Vitest has the same API as Jest (`describe`, `it`, `expect`) and works directly with the Vite config, so no extra Babel setup is needed.
-
-- 34 unit tests cover the NavBar, App routing, QuoteForm validation, QuoteResult, Spinner, ErrorBanner, the `useQuoteRequest` hook and the quotes API (with `fetch` mocked)
-- Coverage: 97.8% statements, 87.3% branches, 100% functions, 98.2% lines
-
-End-to-end tests use **Cypress** (`cypress/e2e/quote-flow.cy.js`) with the quotes API intercepted, so they do not depend on the network:
-
-- An empty submit shows validation errors and focuses the first field
-- A valid form shows the quote card
-- A failed request shows the error banner, and "Try again" recovers
-- The dark theme is still active after a page reload
-
-## CI
-
-GitHub Actions (`.github/workflows/ci.yml`) runs on every push to `main` and on pull requests: install, lint, unit tests with coverage, production build and the Cypress tests.
-
-## Accessibility
-
-- Every input has a `<label>` linked with `htmlFor`
-- Invalid fields use `aria-invalid` and `aria-describedby` pointing to their error message
-- Error messages use `role="alert"` so screen readers announce them
-- The quote result area uses `aria-live="polite"` so loading, error and success updates are announced
-- The whole form can be used with the keyboard only (Tab, Shift+Tab, Enter), with a clear focus outline
-- The theme toggle and the menu button are real buttons with labels and visible focus outlines
-
-## Tech
-
-React, Vite, React Router, validator.js (email check), CSS Modules, Vitest, React Testing Library, Cypress, GitHub Actions
-
-## Project structure
-
-- `src/components/QuoteForm.jsx`: the form, validation and submit handling
-- `src/components/QuoteResult.jsx`: shows the spinner, error message or quote card
-- `src/components/NavBar.jsx`: navigation, mobile menu and theme toggle
-- `src/context/`: `ThemeProvider`, `themeContext` and the `useTheme` hook
+- `src/components/`: NavBar, QuoteForm, QuoteResult, Spinner, ErrorBanner
+- `src/pages/`: Home, About and Quote pages
+- `src/context/`: theme provider and `useTheme` hook
 - `src/hooks/useQuoteRequest.js`: request state (idle, pending, success, error), retry and cancel
-- `src/api/quotesApi.js`: the `fetch` call to the mock endpoint
+- `src/api/quotesApi.js`: the call to the mock endpoint
 - `cypress/e2e/`: end-to-end tests
+- `.github/workflows/ci.yml`: CI/CD pipeline
+- `netlify.toml`: build settings and the redirect for client-side routes
 
-## Run locally
+## Setup
+
+You need Node.js 20 or newer (CI uses Node 22) and npm.
 
 ```bash
+git clone https://github.com/taimurniazi2498/safehands-deploy.git
+cd safehands-deploy
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173/quote
+Open http://localhost:5173.
 
-## Scripts
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run unit tests once |
+| `npm run coverage` | Run unit tests with a coverage report |
+| `npm run cypress:run` | Run the Cypress tests (start `npm run dev` first) |
+| `npm run cypress:open` | Open the Cypress runner |
 
-- `npm run dev`: start the dev server
-- `npm run build`: production build
-- `npm run preview`: serve the production build
-- `npm run lint`: run ESLint
-- `npm test`: run the unit tests once
-- `npm run coverage`: run the unit tests with a coverage report
-- `npm run cypress:run`: run the Cypress tests (start `npm run dev` first)
-- `npm run cypress:open`: open the Cypress runner
+## Testing
 
-## How to test loading and error states
+- **Unit tests (Vitest + React Testing Library):** `npm test`. 34 tests cover the NavBar, routing, the form validation, the quote result, spinner, error banner, the `useQuoteRequest` hook and the API (with `fetch` mocked). Coverage: 97.8% statements, 87.3% branches, 100% functions, 98.2% lines (`npm run coverage`).
+- **End-to-end tests (Cypress):** `npm run cypress:run` with `npm run dev` running. The quotes API is intercepted, so the tests do not need the network. They check validation errors, a successful quote, an error followed by retry, and that the dark theme survives a reload.
+- **Lint:** `npm run lint`.
+- **Manual check of loading and error states:** submit the form, then set Chrome DevTools, Network, throttling to Offline and submit again to see the error message. Set it back to No throttling and press "Try again".
 
-1. Fill in the form and submit. A spinner appears, then the quote card.
-2. Open Chrome DevTools, go to the Network tab and set throttling to Offline.
-3. Submit again. A friendly error message appears with a "Try again" button.
-4. Set throttling back to No throttling and click "Try again". The quote card appears without refilling the form.
+## Deployment
 
-## How to test dark mode
+Every push to `main` runs `.github/workflows/ci.yml`:
 
-1. Click the moon icon in the header. The page switches to the dark theme and the icon changes to a sun.
-2. Reload the page. The dark theme stays.
-3. In DevTools, open Application, then Local Storage, and check the `theme` key.
+1. **test** job: install, lint, unit tests with coverage, production build and Cypress tests.
+2. **deploy** job: runs only if `test` passes and only on a push to `main`. It builds the app and publishes `dist/` to Netlify with the Netlify CLI.
 
-## What was done and why
+The workflow status is shown by the CI badge at the top of this file.
 
-Task 3: I used controlled inputs so the form state is always in React. Each field has its own validation function, so error messages stay specific and easy to change. ARIA attributes and focus management make the form usable for keyboard and screen reader users.
+**GitHub secrets needed** (Settings, Secrets and variables, Actions):
 
-Task 4: The request state lives in a reducer inside the `useQuoteRequest` hook, with four states (idle, pending, success, error). A reducer keeps the UI state in React state, makes every change explicit, and stops impossible combinations such as a spinner and an error at the same time. The hook remembers the last submitted values so retry does not need the form to be filled again, and it cancels an older request when a new one starts.
+- `NETLIFY_AUTH_TOKEN`: a Netlify personal access token
+- `NETLIFY_SITE_ID`: the Project ID of the Netlify site (Project configuration, General)
 
-Task 5: I used CSS variables for the two colour palettes, so switching theme only changes one attribute on the `<html>` element instead of rewriting component styles. The choice is saved in `localStorage` so it survives a reload. For performance I split the About and Quote pages with `React.lazy`, because most visitors only need the Home page first. I chose Vitest over Jest because the project already uses Vite, which means the same config and no extra setup. The Cypress tests intercept the API so they are fast and do not fail because of the network, and the CI workflow runs lint, unit tests, the build and Cypress on every push so a broken change is caught early.
+`netlify.toml` sets the build command (`npm run build`), the publish folder (`dist`) and a redirect of all paths to `index.html`, so `/about` and `/quote` still work after a page refresh.
+
+**Manual deploy (if ever needed):** install the Netlify CLI, then run `npm run build` and `netlify deploy --prod --dir=dist`.
+
+## Client Handover
+
+**Live URL:** https://safehands-insurance-quote.netlify.app
+
+**What the client gets:** a working quote request site with Home, About and Quote pages, a light/dark theme, and automatic publishing: every change merged to `main` goes live after the checks pass.
+
+**Using the site:** open the Quote page, fill in name, email, phone and insurance type, and press "Get my quote". Errors are shown under each field. If the request fails, a "Try again" button appears.
+
+**Things to know**
+
+- The quotes API is a mock (jsonplaceholder). The premium and coverage amounts on the quote card are calculated in the front end from a simple demo formula in `src/components/QuoteResult.jsx`. For real quotes, replace the endpoint in `src/api/quotesApi.js` with the real service and take the amounts from its response.
+- Submitted form data is not stored anywhere in this version.
+- The chosen theme is stored in the visitor's browser (`localStorage` key `theme`).
+
+**Maintenance tips**
+
+- Before changing anything, run `npm run lint`, `npm test` and `npm run build`. The same checks run in CI, and a failing check stops the deploy.
+- Check for outdated packages from time to time with `npm outdated`, and update them in a separate commit so problems are easy to find.
+- If the Netlify token expires, create a new one in Netlify (User settings, Applications) and replace the `NETLIFY_AUTH_TOKEN` secret in GitHub.
+- To go back to an earlier version of the site, open Netlify, Deploys, choose an older deploy and press "Publish deploy".
+- To use a custom domain, add it in Netlify under Domain management.
