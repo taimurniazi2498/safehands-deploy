@@ -83,6 +83,8 @@ The workflow status is shown by the CI badge at the top of this file.
 
 **Live URL:** https://safehands-insurance-quote.netlify.app
 
+**Handover summary for the client:** [docs/handover.pdf](docs/handover.pdf)
+
 **What the client gets:** a working quote request site with Home, About and Quote pages, a light/dark theme, and automatic publishing: every change merged to `main` goes live after the checks pass.
 
 **Using the site:** open the Quote page, fill in name, email, phone and insurance type, and press "Get my quote". Errors are shown under each field. If the request fails, a "Try again" button appears.
